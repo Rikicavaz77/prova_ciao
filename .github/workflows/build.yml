@@ -28,8 +28,8 @@ jobs:
         ls
         mv build-output Docs
 
-    - name: Imposta la variabile d'ambiente per il percorso della cartella
-      run: echo "export FOLDER_PATH=$(pwd)/Docs" >> $GITHUB_ENV
+    #- name: Imposta la variabile d'ambiente per il percorso della cartella
+     #run: echo "export FOLDER_PATH=$(pwd)/Docs" >> $GITHUB_ENV
 
     - name: Checkout nella nuova repo
       uses: actions/checkout@v2
