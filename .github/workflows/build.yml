@@ -36,6 +36,7 @@ jobs:
       with:
         repository: Rikicavaz77/prova_destination
         ref: main  
+        token: ${{ secrets.UPLOAD_TOKEN }}
 
     - name: Commit e push nella nuova repository
       env:
