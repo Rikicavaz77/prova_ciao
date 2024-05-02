@@ -40,6 +40,8 @@ jobs:
         ssh-keyscan github.com >> ~/.ssh/known_hosts
         cat ~/.ssh/known_hosts
         git remote add board git@github.com:Rikicavaz77/prova_destination.git
+        git add Docs
+        git commit -m "PDF"
         git push -u board
     
     - name: Publish artifacts
