@@ -32,7 +32,7 @@ jobs:
       run: echo "export FOLDER_PATH=$(pwd)/Docs" >> $GITHUB_ENV
 
     - name: Checkout nella nuova repo
-      uses: actions/checkout@v4
+      uses: actions/checkout@v2
       with:
         repository: Rikicavaz77/prova_destination
         ref: main  
@@ -59,7 +59,3 @@ jobs:
         cd ${{ github.workspace }}/tools
         docker compose stop
             
-    - name: Stop Docker Compose
-      run: |
-        cd ${{ github.workspace }}/tools
-        docker compose stop
