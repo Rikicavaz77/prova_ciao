@@ -30,7 +30,7 @@ jobs:
 
     - name: Configure SSH and clone
       env:
-        SSH_PRIVATE_KEY: ${{ secrets.UPLOAD_TOKEN }}
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       run: |
         git config --global user.name 'bot'
         git config --global user.email 'riccardo.cavalli@studenti.unipd.it'
