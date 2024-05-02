@@ -1,0 +1,60 @@
+name: Build and Stop Docker Compose
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Start containers
+      run: |
+        cd ${{ github.workspace }}/tools
+        docker compose up -d 
+
+    - name: Compile documents
+      run: |
+        cd ${{ github.workspace }}/tools
+        docker exec argo-docs-latexpdfbuilder-1 bash -c 'cd /data && chmod +x *.sh && ./compilescript.sh -a'
+
+    - name: Commit and push changes
+      run: |
+        ls
+        mv build-output Docs
+
+    - name: Configure SSH and clone
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.UPLOAD_TOKEN }}
+      run: |
+        git config --global user.name 'bot'
+        git config --global user.email 'riccardo.cavalli@studenti.unipd.it'
+        mkdir -p ~/.ssh
+        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan github.com >> ~/.ssh/known_hosts
+        cat ~/.ssh/known_hosts
+        git remote add board git@github.com:Rikicavaz77/prova_destination.git
+        git push -u board
+    
+    - name: Publish artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: Documentazione
+        path: |
+          build
+            
+    - name: Stop Docker Compose
+      run: |
+        cd ${{ github.workspace }}/tools
+        docker compose stop
+            
+    - name: Stop Docker Compose
+      run: |
+        cd ${{ github.workspace }}/tools
+        docker compose stop
