@@ -22,30 +22,25 @@ jobs:
       run: |
         cd ${{ github.workspace }}/tools
         docker exec argo-docs-latexpdfbuilder-1 bash -c 'cd /data && chmod +x *.sh && ./compilescript.sh -a'
+    
+    - name: Checkout to new repo
+      uses: actions/checkout@v2
+      with:
+        repository: Rikicavaz77/MTSS-Assignment-2
+        token: ${{ secrets.UPLOAD_TOKEN }}
 
     - name: Commit and push changes
       run: |
+        git config --global user.name 'Rikicavaz77'
+        git config --global user.email 'riccardo.cavalli@studenti.unipd.it'
         ls
         mv build-output Docs
+        git add Docs 
+        git commit -m "[BOT] Caricamento PDF"
+        git push
 
     #- name: Imposta la variabile d'ambiente per il percorso della cartella
      #run: echo "export FOLDER_PATH=$(pwd)/Docs" >> $GITHUB_ENV
-
-    - name: Checkout nella nuova repo
-      uses: actions/checkout@v2
-      with:
-        repository: Rikicavaz77/prova_destination 
-        token: ${{ secrets.UPLOAD_TOKEN }}
-
-    - name: Commit e push nella nuova repository
-      env:
-        FOLDER_PATH: ${{ env.FOLDER_PATH }}
-      run: |
-        git config --global user.name 'bot'
-        git config --global user.email 'riccardo.cavalli@studenti.unipd.it'
-        git add .
-        git commit -m "Aggiornamento dalla cartella $FOLDER_PATH"
-        git push
     
     - name: Publish artifacts
       uses: actions/upload-artifact@v3
