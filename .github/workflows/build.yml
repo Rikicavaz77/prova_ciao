@@ -28,21 +28,24 @@ jobs:
         ls
         mv build-output Docs
 
-    - name: Configure SSH and clone
+    - name: Imposta la variabile d'ambiente per il percorso della cartella
+      run: echo "export FOLDER_PATH=$(pwd)/Docs" >> $GITHUB_ENV
+
+    - name: Checkout nella nuova repo
+      uses: actions/checkout@v4
+      with:
+        repository: Rikicavaz77/prova_destination
+        ref: main  
+
+    - name: Commit e push nella nuova repository
       env:
-        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        FOLDER_PATH: ${{ env.FOLDER_PATH }}
       run: |
         git config --global user.name 'bot'
         git config --global user.email 'riccardo.cavalli@studenti.unipd.it'
-        mkdir -p ~/.ssh
-        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        ssh-keyscan github.com >> ~/.ssh/known_hosts
-        cat ~/.ssh/known_hosts
-        git remote add board git@github.com:Rikicavaz77/prova_destination.git
-        git add Docs
-        git commit -m "PDF"
-        git push -u board
+        git add .
+        git commit -m "Aggiornamento dalla cartella $FOLDER_PATH"
+        git push
     
     - name: Publish artifacts
       uses: actions/upload-artifact@v3
